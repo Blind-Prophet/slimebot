@@ -1,0 +1,16 @@
+{
+  "name": "slimetime",
+  "version": "1.0.0",
+  "description": "A slimy discord bot",
+  "main": "slimebot.js",
+  "dependencies": {
+    "discord.io": "^2.5.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

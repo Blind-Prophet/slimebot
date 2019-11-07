@@ -1,0 +1,21 @@
+[
+    {
+        "keys":["slime"],
+        "msg":"It's Slime Time!"
+    },{
+        "keys":["burger","king"],
+        "msg":"Number 15: Burger King Foot Lettuce\n\nThe last thing youd want in your Burger King burger is someones foot fungus. But as it turns out, that might be what you get. A 4channer uploaded a photo anonymously to the site showcasing his feet in a plastic bin of lettuce, with the statement: \"This is the lettuce you eat at Burger King.\""
+    },{
+        "keys":["oh","bones"],
+        "msg":"[user] your bones!"
+    },{
+        "keys":["monkey","gun"],
+        "msg":"<:angery:332761232484335626>"
+    },{
+        "keys":["chimp","gun"],
+        "msg":"<:angery:332761232484335626>"
+    },{
+        "keys":["worm"],
+        "file":"data/ohworm.jpg"
+    }
+]
