@@ -187,6 +187,7 @@ bot.on('message', function(user, userID, channelID, message, event){
                             attr.int = intelligence;
                             attr.agi = agility;
                             attr.mag = magic;
+                            if(rpd[userID]==null){ rpd[userID] = new Object; }
                             rpd[userID].attributes = attr;
                             response = "Attributes successfully created.";
                         }
@@ -236,7 +237,7 @@ bot.on('message', function(user, userID, channelID, message, event){
             }
 
             fs.writeFileSync('data/roleplay.json',JSON.stringify(rpd));
-        }
+        }//214396662783672323
         else if(compare(arguments[1],"check"))
         {
             var rpd = JSON.parse(fs.readFileSync('data/roleplay.json').toString());
