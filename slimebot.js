@@ -30,26 +30,19 @@ bot.on('message', function(user, userID, channelID, message, event){
 
     //Check if slimebot was tagged
 	if(getid(arguments[0])==bot.id){
-        //default response
-        var response = "What?"
+        var response = ""
 
         //check first argument for top level command
-        if(compare(arguments[1],"help")){
+        if(compare(arguments[1],"help"))
+        {
             response=help();
         }
-        else if(compare(arguments[1],"hi")){
+        else if((compare(arguments[1],"hi"))||(compare(arguments[1],"hey"))||(compare(arguments[1],"hello"))||(compare(arguments[1],"howdy")))
+        {
             response=hi();
         }
-        else if(compare(arguments[1],"hey")){
-            response=hi();
-        }
-        else if(compare(arguments[1],"hello")){
-            response=hi();
-        }
-        else if(compare(arguments[1],"howdy")){
-            response=hi();
-        }
-        else if((compare(arguments[1],"fuck")) && (compare(arguments[2],"you"))){
+        else if((compare(arguments[1],"fuck")) && (compare(arguments[2],"you")))
+        {
             response=sadcat();
         }
         else if((compare(arguments[1],"i")) && (compare(arguments[2],"love")) && (compare(arguments[3],"you")))
@@ -60,12 +53,245 @@ bot.on('message', function(user, userID, channelID, message, event){
         {
             response="I am here, do not worry.";
         }
-        else if((compare(arguments[1],"thank")) && (compare(arguments[2],"you"))){
+        else if((compare(arguments[1],"thank")) && (compare(arguments[2],"you")))
+        {
             response="You're welcome!";
         }
-        else if(compare(arguments[1],"roll")){
+        else if(compare(arguments[1],"roll"))
+        {
             response = dice(user,arguments);
         }
+        else if((compare(arguments[1],"attributes"))||(compare(arguments[1],"attr")))
+        {
+            //Import character data
+            var rpd = JSON.parse(fs.readFileSync('data/roleplay.json').toString());
+
+            //check the second level command
+            if(compare(arguments[2],"create"))
+            {
+                //Create subcommand needs 10 arguments
+                if(arguments.length == 10)
+                {
+                    //STRENGTH
+                    var strength = 0;
+                    if(isNaN(arguments[3]))
+                    {
+                        response="Attribute STRENGTH was not a number.";
+                    }
+                    else
+                    {
+                        strength = parseInt(arguments[3]);
+                        if(strength<1 || strength>30){
+                            response="Attribute STRENGTH must be between 1 and 30.";
+                        }
+                    }
+
+                    //PERCEPTION
+                    var perception = 0;
+                    if(isNaN(arguments[4]))
+                    {
+                        response="Attribute PERCEPTION/WISDOM was not a number.";
+                    }
+                    else
+                    {
+                        perception = parseInt(arguments[4]);
+                        if(perception<1 || perception>30){
+                            response="Attribute PERCEPTION/WISDOM must be between 1 and 30.";
+                        }
+                    }
+
+                    //ENDURANCE
+                    var endurance = 0;
+                    if(isNaN(arguments[5]))
+                    {
+                        response="Attribute ENDURANCE/CONSTITUTION was not a number.";
+                    }
+                    else
+                    {
+                        endurance = parseInt(arguments[5]);
+                        if(endurance<1 || endurance>30){
+                            response="Attribute ENDURANCE/CONSTITUTION must be between 1 and 30.";
+                        }
+                    }
+
+                    //CHARISMA
+                    var charisma = 0;
+                    if(isNaN(arguments[6]))
+                    {
+                        response="Attribute CHARISMA was not a number.";
+                    }
+                    else
+                    {
+                        charisma = parseInt(arguments[6]);
+                        if(charisma<1 || charisma>30){
+                            response="Attribute CHARISMA must be between 1 and 30.";
+                        }
+                    }
+
+                    //INTELLIGENCE
+                    var intelligence = 0;
+                    if(isNaN(arguments[7]))
+                    {
+                        response="Attribute INTELLIGENCE was not a number.";
+                    }
+                    else
+                    {
+                        intelligence = parseInt(arguments[7]);
+                        if(intelligence<1 || intelligence>30){
+                            response="Attribute INTELLIGENCE must be between 1 and 30.";
+                        }
+                    }
+
+                    //AGILITY
+                    var agility = 0;
+                    if(isNaN(arguments[8]))
+                    {
+                        response="Attribute AGILITY/DEXTERITY was not a number.";
+                    }
+                    else
+                    {
+                        agility = parseInt(arguments[8]);
+                        if(agility<1 || agility>30){
+                            response="Attribute AGILITY/DEXTERITY must be between 1 and 30.";
+                        }
+                    }
+
+                    //MAGIC
+                    var magic = 0;
+                    if(isNaN(arguments[9]))
+                    {
+                        response="Attribute MAGIC was not a number.";
+                    }
+                    else
+                    {
+                        magic = parseInt(arguments[9]);
+                        if(magic<1 || magic>30){
+                            response="Attribute MAGIC must be between 1 and 30.";
+                        }
+                    }
+
+                    if(response==""){
+                        //no errors so far
+
+                        if(strength+perception+endurance+charisma+intelligence+agility+magic != 74)
+                        {
+                            response="All attributes must add up to 74.";
+                        }
+                        else
+                        {
+                            var attr = new Object;
+                            attr.str = strength;
+                            attr.per = perception;
+                            attr.end = endurance;
+                            attr.cha = charisma;
+                            attr.int = intelligence;
+                            attr.agi = agility;
+                            attr.mag = magic;
+                            rpd[userID].attributes = attr;
+                            response = "Attributes successfully created.";
+                        }
+                    }
+                }
+                else
+                {
+                    response = "Use 'attributes create [str] [wis/per] [end/con] [cha] [int] [dex/agl] [mag]' to create your attributes. Each attribute may have no more than 30 points and no less than 1 point. Your total attributes must add up to 74."
+                }
+            }
+            else if(compare(arguments[2],"list"))
+            {
+                //default id is user who sent message
+                var id = userID;
+                //if message contains user to check attr of
+                if(arguments[3]!=null && arguments[3]!='')
+                {
+                    id = getid(arguments[3]);
+                }
+                //check if the user has an entry in the file
+                if(rpd[id]!=null)
+                {
+                    //check if user has attributes
+                    if(rpd[id].attributes!=null){
+                        response="Strength: "+rpd[id].attributes.str;
+						response += "\nWisdom/Perception: "+rpd[id].attributes.per;
+					    response += "\nEndurance/Constitution: "+rpd[id].attributes.end;
+					    response += "\nCharisma: "+rpd[id].attributes.cha;
+					    response += "\nIntelligence: "+rpd[id].attributes.int;
+					    response += "\nDexterity/Agility: "+rpd[id].attributes.agi;
+					    response += "\nMagic: "+rpd[id].attributes.mag;
+                    }else{
+                        response="No attributes found for given user. Sorry :(";
+                    }
+                }
+                else
+                {
+                    response="No data found for given user. Sorry :(";
+                }
+            }
+            else
+            {
+                response = "There are 7 attributes: Strength, Wisdom/Perception, Endurance/Constitution, Charisma, Intelligence, Dexterity/Agility, and Magic.";
+                response += "\nUse 'attributes create' to set up your own attributes.";
+                response += "\nUse 'attributes list <user>' to see your current attributes.";
+                response += "\nUse 'check [attr] <number>' to run an skill check based on your own attributes.";
+            }
+
+            fs.writeFileSync('data/roleplay.json',JSON.stringify(rpd));
+        }
+        else if(compare(arguments[1],"check"))
+        {
+            var rpd = JSON.parse(fs.readFileSync('data/roleplay.json').toString());
+
+            if(arguments.length > 2){
+				if(rpd[userID]!=null){
+					if(rpd[userID].attributes!=null){
+						var level=0;
+						var modifier=0;
+						if(arguments[2].toUpperCase()=="STRENGTH" || arguments[2].toUpperCase()=="STR" ){
+							level = rpd[userID].attributes.str;
+						}else if(arguments[2].toUpperCase()=="WISDOM" || arguments[2].toUpperCase()=="PERCEPTION" || arguments[2].toUpperCase()=="WIS" || arguments[2].toUpperCase()=="PER"){
+							level =  rp_darpdta[userID].attributes.per;
+						}else if(arguments[2].toUpperCase()=="ENDURANCE" || arguments[2].toUpperCase()=="CONSTITUTION" || arguments[2].toUpperCase()=="END" || arguments[2].toUpperCase()=="CON"){
+							level =  rpd[userID].attributes.end;
+						}else if(arguments[2].toUpperCase()=="CHARISMA" || arguments[2].toUpperCase()=="CHA"){
+							level =  rpd[userID].attributes.cha;
+						}else if(arguments[2].toUpperCase()=="INTELLIGENCE" || arguments[2].toUpperCase()=="INT"){
+							level =  rpd[userID].attributes.int;
+						}else if(arguments[2].toUpperCase()=="AGILITY" || arguments[2].toUpperCase()=="DEXTERITY" || arguments[2].toUpperCase()=="AGI" || arguments[2].toUpperCase()=="DEX"){
+							level =  rpd[userID].attributes.agi;
+						}else if(arguments[2].toUpperCase()=="MAGIC" || arguments[2].toUpperCase()=="MAG"){
+							level =  rpd[userID].attributes.mag;
+						}else{
+							response = "Unkown attribute '"+arguments[2]+"' sorry :(";
+						}
+
+						if(response==""){
+							modifier = (Math.floor(parseInt(level)/2)) - 5;
+							var roll = Math.floor((Math.random() * 20) + 1);
+							var total = roll + modifier;
+							response = user+" rolled a "+roll;
+							response += "\nTheir "+arguments[2]+" modifier is ("+modifier+")";
+							response += "\nFor a total of "+total;
+							if(arguments.length>3 && !isNaN(arguments[3])){
+								if(total>=parseInt(arguments[3])){
+									response+= '\n'+user +" passed the "+arguments[2]+" "+arguments[3]+" check.";
+								}else{
+									response+= '\n'+user +" failed the "+arguments[2]+" "+arguments[3]+" check.";
+								}
+							}
+						}
+					}else{
+						response="I could not find your attributes. Sorry :(";
+					}
+				}else{
+					response="I could not find your user data. Sorry :(";
+				}
+			}else{
+				response = "Use 'check [attribute] <number>' to roll a d20 with modifiers."
+			}
+        }
+
+        //default response
+        if(response==""){response="What?"}
 
         //send response
         bot.sendMessage({
@@ -160,9 +386,11 @@ function compare(data,key){
 
 //Multiple Line Response Functions
 function help(){
-	var str="Slimebot X: Help Interface";
-	str+="\nhelp: displays this message";
-	str+="\nroll <number>: rolls a dice. default is d20";
+	var str="**__Slimebot - Help Interface__**";
+	str+="\n**help:** displays this message";
+    str+="\n**roll <number>:** rolls a dice. default is d20";
+	str+="\n**attributes:** setup and view your attributes";
+	str+="\n**check [attr] <number>:** test your attributes against a dice roll";
 	return str;
 }
 

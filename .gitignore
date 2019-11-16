@@ -3,3 +3,6 @@
 
 # Don't track files with these extensions
 *.secret
+
+#Don't track these exact files
+data/roleplay.json
