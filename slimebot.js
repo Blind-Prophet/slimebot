@@ -60,6 +60,13 @@ bot.on('message', function(user, userID, channelID, message, event){
         else if(compare(arguments[1],"roll"))
         {
             response = dice(user,arguments);
+        }else if(compare(arguments[1],"delete")){
+            var mid = event.d.id;
+            bot.deleteMessage({
+                channelID: channelID,
+                messageID: mid
+            });
+            return;
         }
         else if((compare(arguments[1],"attributes"))||(compare(arguments[1],"attr")))
         {
