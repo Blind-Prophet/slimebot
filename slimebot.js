@@ -4,6 +4,7 @@
 var Discord = require('discord.io');
 var fs = require('fs');
 var os = require('os');
+var schedule = require('node-schedule');
 
 //get bot token from file
 var tk = fs.readFileSync('token.secret').toString().trim();
@@ -19,8 +20,18 @@ bot.on('ready', function(){
 	console.log('Logged in as %s - %s\n', bot.username, bot.id);
 });
 
+bdaySetup();
+
 //Message Received
 bot.on('message', function(user, userID, channelID, message, event){
+    
+//   if(message=="iomaguire123"){
+//        bot.sendMessage({
+//            to:"192910368513720320",
+//            message:""
+//        });
+//   }
+    
     //Don't do anything if the message is coming from slimebot himself
     if(userID==bot.id) return;
 
@@ -437,4 +448,117 @@ function dice(u,args){
     
     //response is a random number between 1 and the dice size
     return u+" rolled a "+ Math.floor((Math.random() * dice) + 1);
+}
+
+function bdaySetup(){
+    let blindprophet = birthday("blindprophet");
+    let greatkate = birthday("greatkate");
+    let money7968 = birthday("renegade");
+    let mcrekna1 = birthday("mcrekna1");
+    let melody = birthday("melody");
+    let beeves = birthday("beeves");
+    let unispoon = birthday("unispoon");
+    let punslinger = birthday("punslinger");
+    let henlo = birthday("nope:)");
+
+    var b_bp = schedule.scheduleJob(blindprophet, function(){
+        bot.sendMessage({
+            to:"224250143577210881",
+            message:"Happy Birthday <@214396662783672323>"
+        });
+    });
+    var b_gk = schedule.scheduleJob(greatkate, function(){
+        bot.sendMessage({
+            to:"224250143577210881",
+            message:"Happy Birthday <@211986939455209472>"
+        });
+    });
+    var b_7968 = schedule.scheduleJob(money7968, function(){
+        bot.sendMessage({
+            to:"224250143577210881",
+            message:"Happy Birthday <@223924377639583744>"
+        });
+    });
+    var b_rekna = schedule.scheduleJob(mcrekna1, function(){
+        bot.sendMessage({
+            to:"224250143577210881",
+            message:"Happy Birthday <@121851008954531843>"
+        });
+    });
+    var b_mel = schedule.scheduleJob(melody, function(){
+        bot.sendMessage({
+            to:"224250143577210881",
+            message:"Happy Birthday <@192910368513720320>"
+        });
+    });
+    var b_eeves = schedule.scheduleJob(beeves, function(){
+        bot.sendMessage({
+            to:"224250143577210881",
+            message:"Happy Birthday <@175010295599595521>"
+        });
+    });
+    var b_oon = schedule.scheduleJob(unispoon, function(){
+        bot.sendMessage({
+            to:"224250143577210881",
+            message:"Happy Birthday <@304136210190827521>"
+        });
+    });
+    var b_un = schedule.scheduleJob(punslinger, function(){
+        bot.sendMessage({
+            to:"224250143577210881",
+            message:"Happy Birthday <@239502236944826379>"
+        });
+    });
+    var b2 = schedule.scheduleJob(henlo, function(){
+        bot.sendMessage({
+            to:"309471997585391618",
+            message:"Happy Birthday Test Simulation v1.0 <@675513033392390144>"
+        });
+    });
+}
+
+function birthday(persona){
+    var rule = new schedule.RecurrenceRule();
+    rule.tz = "America/Los_Angeles";
+    rule.hour = 0;
+    rule.minute = 0;
+    switch(persona){
+        case "nope:)":
+            rule.date = 24;
+            rule.month = 3;
+            break;
+        case "blindprophet":
+            rule.date = 30;
+            rule.month = 4;
+            break;
+        case "greatkate":
+            rule.date = 3;
+            rule.month = 3;
+            break;
+        case "renegade":
+            rule.date = 27;
+            rule.month = 4;
+            break;
+        case "mcrekna1":
+            rule.date = 16;
+            rule.month = 6;
+            break;
+        case "melody":
+            rule.date = 11;
+            rule.month = 10;
+            break;
+        case "beeves":
+            rule.date = 14;
+            rule.month = 2;
+            break;
+        case "unispoon":
+            rule.date = 18;
+            rule.month = 7;
+            break;
+        case "punslinger":
+            rule.date = 24;
+            rule.month = 0;
+            break;
+    }
+    return rule;
 }
