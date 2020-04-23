@@ -37,6 +37,10 @@ bot.on('message', function(user, userID, channelID, message, event){
 
     //get message as array of arguments
     var arguments = tokenize(message);
+
+
+    //no empty messages
+    if(arguments.length == 0) return;
     
 
     //Check if slimebot was tagged
