@@ -27,8 +27,8 @@ bot.on('message', function(user, userID, channelID, message, event){
     
 //   if(message=="iomaguire123"){
 //        bot.sendMessage({
-//            to:"192910368513720320",
-//            message:""
+//            to:"309471997585391618",
+//            message:"Mention Test 1.2 <@223924377639583744> <@211986939455209472> <@214396662783672323>"
 //        });
 //   }
     
@@ -463,7 +463,6 @@ function bdaySetup(){
     let beeves = birthday("beeves");
     let unispoon = birthday("unispoon");
     let punslinger = birthday("punslinger");
-    let henlo = birthday("nope:)");
 
     var b_bp = schedule.scheduleJob(blindprophet, function(){
         bot.sendMessage({
@@ -513,12 +512,6 @@ function bdaySetup(){
             message:"Happy Birthday <@239502236944826379>"
         });
     });
-    var b2 = schedule.scheduleJob(henlo, function(){
-        bot.sendMessage({
-            to:"309471997585391618",
-            message:"Happy Birthday Test Simulation v1.0 <@675513033392390144>"
-        });
-    });
 }
 
 function birthday(persona){
@@ -527,10 +520,6 @@ function birthday(persona){
     rule.hour = 0;
     rule.minute = 0;
     switch(persona){
-        case "nope:)":
-            rule.date = 24;
-            rule.month = 3;
-            break;
         case "blindprophet":
             rule.date = 30;
             rule.month = 4;
