@@ -15,6 +15,11 @@ var bot = new Discord.Client({
 	autorun: true
 });
 
+bot.on('disconnect', function(erMsg, code) {
+    console.log('----- Bot disconnected from Discord with code', code, 'for reason:', erMsg, '-----');
+    bot.connect();
+});
+
 //Ready Slimebot
 bot.on('ready', function(){
 	console.log('Logged in as %s - %s\n', bot.username, bot.id);
