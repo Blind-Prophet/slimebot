@@ -277,7 +277,7 @@ bot.on('message', function(user, userID, channelID, message, event){
 						if(arguments[2].toUpperCase()=="STRENGTH" || arguments[2].toUpperCase()=="STR" ){
 							level = rpd[userID].attributes.str;
 						}else if(arguments[2].toUpperCase()=="WISDOM" || arguments[2].toUpperCase()=="PERCEPTION" || arguments[2].toUpperCase()=="WIS" || arguments[2].toUpperCase()=="PER"){
-							level =  rp_darpdta[userID].attributes.per;
+							level =  rpd[userID].attributes.per;
 						}else if(arguments[2].toUpperCase()=="ENDURANCE" || arguments[2].toUpperCase()=="CONSTITUTION" || arguments[2].toUpperCase()=="END" || arguments[2].toUpperCase()=="CON"){
 							level =  rpd[userID].attributes.end;
 						}else if(arguments[2].toUpperCase()=="CHARISMA" || arguments[2].toUpperCase()=="CHA"){
