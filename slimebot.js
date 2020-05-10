@@ -588,7 +588,8 @@ function help(){
 	str+="\n**help:** displays this message";
     str+="\n**roll <number>:** rolls a dice. default is d20";
 	str+="\n**attributes:** setup and view your attributes";
-	str+="\n**check [attr] <number>:** test your attributes against a dice roll";
+    str+="\n**check [attr] <number>:** test your attributes against a dice roll";
+    str+="\n**inventory:** add and remove items from your inventroy";
 	return str;
 }
 
