@@ -317,6 +317,176 @@ bot.on('message', function(user, userID, channelID, message, event){
 				response = "Use 'check [attribute] <number>' to roll a d20 with modifiers."
 			}
         }
+        else if((compare(arguments[1],"inventory"))||(compare(arguments[1],"inv")))
+        {
+            //Import character data
+            var rpd = JSON.parse(fs.readFileSync('data/roleplay.json').toString());
+
+            //check the second level command
+            if(compare(arguments[2],"list"))
+            {
+                 //default id is user who sent message
+                 var id = userID;
+                 //if message contains user to check attr of
+                 if(arguments[3]!=null && arguments[3]!='')
+                 {
+                     id = getid(arguments[3]);
+                 }
+
+                 let inv = [];
+                 //check if the user has an entry in the file
+                 if(rpd[id]!=null)
+                 {
+                     if(rpd[id].inventory!=null){
+                         inv = rpd[id].inventory;
+                     }
+                     else{
+                         rpd[id].inventory = [];
+                     }
+                 }
+                 else
+                 {
+                     let temp = {}
+                     temp.inventory = [];
+                     rpd[id] = temp;
+                 }
+
+                 response = "Current Inventory ["+inv.length+"/10]";
+                 for(var i=0;i<inv.length;i++){
+                     response+="\n["+i+"] "+inv[i];
+                 }
+            }
+            else if(compare(arguments[2],"add"))
+            {
+                if(arguments[3]!=null && arguments[3]!='')
+                {
+                    let item = arguments[3].replace(/^"|"$/g, '');
+                    if(isInt(item)){
+                        response = "The [item] cannot be an integer value. Sorry :("
+                    }
+                    else if(item.length > 100)
+                    {
+                        response ="The [item] cannot be longer than 100 characters. Sorry :("
+                    }else if(item.replace(/\s/g,'') == ""){
+                        response = "The [item] cannot only be blank characters. Sorry :("
+                    }
+                    else{
+                        //only user can add items
+                        var id = userID;
+                        //check if the user has an entry in the file
+                        let inv = [];
+                        if(rpd[id]!=null)
+                        {
+                            if(rpd[id].inventory!=null){
+                                inv = rpd[id].inventory;
+                            }
+                            else
+                            {
+                                rpd[id].inventory = [];
+                            }
+                        }
+                        else
+                        {
+                            let temp = {}
+                            temp.inventory = [];
+                            rpd[id] = temp;
+                        }
+
+                        if(inv.length>=10){
+                            response = "You're inventory is full.";
+                        }else{
+                            inv.push(item);
+                            rpd[id].inventory = inv;
+                            fs.writeFileSync('data/roleplay.json',JSON.stringify(rpd));
+                            response = "\""+item+"\" successfully added to your inventory.";
+                        }
+
+                    }
+                }
+                else
+                {
+                    response = "Use 'inventory add [item]' to add an item to your inventory."
+                }
+            }
+            else if((compare(arguments[2],"rem"))||(compare(arguments[2],"remove")))
+            {
+                if(arguments[3]!=null && arguments[3]!='')
+                {
+                    //only user can remove items
+                    var id = userID;
+                    //check if the user has an entry in the file
+                    let inv = [];
+                    if(rpd[id]!=null)
+                    {
+                        if(rpd[id].inventory!=null){
+                            inv = rpd[id].inventory;
+                        }
+                        else
+                        {
+                            rpd[id].inventory = [];
+                        }
+                    }
+                    else
+                    {
+                        let temp = {}
+                        temp.inventory = [];
+                        rpd[id] = temp;
+                    }
+
+                    if(isInt(arguments[3])){
+                        //argument is the ID
+                        let remID = parseInt(arguments[3]);
+                        if(remID>=inv.length || remID<0){
+                            response = "No item found at ["+remID+"] in your inventory."
+                        }else{
+                            inv.splice(remID,1);
+                            rpd[id].inventory = inv;
+                            fs.writeFileSync('data/roleplay.json',JSON.stringify(rpd));
+                            response = "["+remID+"] successfully removed from your inventory.";
+                        }
+                    }else{
+                        let item = arguments[3].replace(/^"|"$/g, '');
+                        if(inv.includes(item)){
+                            let remID = inv.indexOf(item);
+                            inv.splice(remID,1);
+                            rpd[id].inventory = inv;
+                            fs.writeFileSync('data/roleplay.json',JSON.stringify(rpd));
+                            response = "\""+item+"\" successfully removed from your inventory.";
+                        }else{
+                            response = "No item \""+item+"\" found in your inventory."
+                        }
+                    }
+                }
+                else
+                {
+                    response = "Use 'inventory rem [item|id]' to remove an item from your inventory.";
+                }
+            }
+            else if(compare(arguments[2],"purge")){
+                //only user can purge items
+                var id = userID;
+                //check if the user has an entry in the file
+                if(rpd[id]!=null)
+                {
+                    rpd[id].inventory = [];
+                }
+                else
+                {
+                    let temp = {}
+                    temp.inventory = [];
+                    rpd[id] = temp;
+                }
+                fs.writeFileSync('data/roleplay.json',JSON.stringify(rpd));
+                response = "All items removed from your inventroy."
+            }
+            else
+            {
+                response = "Use 'inventory list <user>' to view your inventory.";
+                response += "\nUse 'inventory add [item]' to add an item to your inventory.";
+                response += "\nUse 'inventory rem [item|id]' to remove an item from your inventory.";
+                response += "\nUse 'inventory purge' to remove all items from your inventory";
+            }
+        }
 
         //default response
         if(response==""){response="What?"}
@@ -560,3 +730,11 @@ function birthday(persona){
     }
     return rule;
 }
+
+function isInt(value) {
+    if (isNaN(value)) {
+      return false;
+    }
+    var x = parseFloat(value);
+    return (x | 0) === x;
+  }
