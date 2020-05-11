@@ -40,6 +40,9 @@ bot.on('message', function(user, userID, channelID, message, event){
     //Don't do anything if the message is coming from slimebot himself
     if(userID==bot.id) return;
 
+    //replace left/right double quotes with straight double quotes
+    message = message.replace(/[\u201C\u201D]/g, '"');
+
     //get message as array of arguments
     var arguments = tokenize(message);
 
