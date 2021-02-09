@@ -48,7 +48,7 @@ bot.on('message', function(user, userID, channelID, message, event){
 
 
     //no empty messages
-    if(arguments.length == 0) return;
+    if(message.length == 0 || arguments.length == 0) return;
     
 
     //Check if slimebot was tagged
@@ -83,13 +83,6 @@ bot.on('message', function(user, userID, channelID, message, event){
         else if(compare(arguments[1],"roll"))
         {
             response = dice(user,arguments);
-        }else if(compare(arguments[1],"delete")){
-            var mid = event.d.id;
-            bot.deleteMessage({
-                channelID: channelID,
-                messageID: mid
-            });
-            return;
         }
         else if((compare(arguments[1],"attributes"))||(compare(arguments[1],"attr")))
         {
